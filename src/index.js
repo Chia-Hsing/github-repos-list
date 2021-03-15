@@ -1,17 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { applyMiddleware, createStore, compose } from 'redux'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import axios from 'axios'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import './index.css'
+import App from './App'
+import reducer from './store/reducer/reducer'
+import reportWebVitals from './reportWebVitals'
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const composeEnhancers =
+    process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose
+
+const axiosInstance = axios.create({
+    baseURL: 'https://api.github.com/users/Chia-Hsing/repos?',
+})
+
+const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk.withExtraArgument(axiosInstance))))
+
+const app = (
+    <Provider store={store}>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </Provider>
+)
+
+ReactDOM.render(app, document.getElementById('root'))
+
+reportWebVitals()
