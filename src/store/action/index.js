@@ -1,1 +1,1 @@
-export { getPublicRepositories, isLoading } from './action'
+export { getPublicRepos } from './action'

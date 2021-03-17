@@ -1,14 +1,23 @@
 import * as actionTypes from './actionTypes'
 
-export const isLoading = () => dispatch => {
-    return dispatch({ type: actionTypes.IS_LOADING })
+const isLoading = () => {
+    return { type: actionTypes.IS_LOADING }
 }
 
-export const getPublicRepositories = (page, perPage) => async (dispatch, getState, api) => {
+export const getPublicRepos = (page, perPage) => async (dispatch, getState, api) => {
     try {
-        const res = await api.get(`page=${page}&per_page=${perPage}`)
+        dispatch(isLoading())
 
-        dispatch({ type: actionTypes.GET_PUBLIC_REPOSITORIES_SUCCESS, res })
+        const res = await api.get('/users/Chia-Hsing/repos', {
+            params: {
+                page,
+                per_page: perPage,
+            },
+        })
+
+        setTimeout(() => {
+            dispatch({ type: actionTypes.GET_PUBLIC_REPOSITORIES_SUCCESS, res })
+        }, 1000)
     } catch (error) {
         dispatch({ type: actionTypes.GET_PUBLIC_REPOSITORIES_FAILED, error })
     }

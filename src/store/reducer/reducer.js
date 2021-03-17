@@ -5,7 +5,7 @@ const initialState = {
     repos: [],
     loading: false,
     error: false,
-    hasMore: true,
+    comingData: false,
 }
 
 const isLoading = (state, action) => {
@@ -15,10 +15,12 @@ const isLoading = (state, action) => {
 }
 
 const getPublicRepositoriesSuccess = (state, action) => {
+    const newRepos = [...state.repos, ...action.res.data]
     return updateObj(state, {
-        repos: action.res.data,
+        repos: newRepos,
         loading: false,
         error: false,
+        comingData: action.res.data.length > 0,
     })
 }
 
