@@ -17,7 +17,7 @@ export const getPublicRepos = (page, perPage) => async (dispatch, getState, api)
 
         setTimeout(() => {
             dispatch({ type: actionTypes.GET_PUBLIC_REPOSITORIES_SUCCESS, res })
-        }, 1000)
+        }, 1500)
     } catch (error) {
         dispatch({ type: actionTypes.GET_PUBLIC_REPOSITORIES_FAILED, error })
     }

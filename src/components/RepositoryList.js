@@ -1,20 +1,39 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { FixedSizeList as List } from 'react-window'
+import useMedia from 'use-media'
 
 import RepositoryItem from './RepositoryItem'
 import * as actions from '../store/action/index'
 import LoadingHolder from './LoadingHolder'
+import { mainLanguage } from '../utils/utilities'
 
 const RepositoryList = props => {
-    const perPage = 4
+    // detect the width of window
+    const widthL = useMedia({ minWidth: '769px' })
+    const widthM = useMedia({ minWidth: '481px' })
+
+    let percent
+
+    if (widthM && !widthL) {
+        percent = 0.7
+    } else if (widthL && widthM) {
+        percent = 0.6
+    } else {
+        percent = 0.9
+    }
+
+    // get public repositories side effect
+    const perPage = 5
     const [currentPage, setCurrentPage] = useState(1)
-    const observer = useRef(null)
 
     useEffect(() => {
         props.onGetPublicRepos(currentPage, perPage)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage])
+
+    // implement intersectionObserver API
+    const observer = useRef(null)
 
     const observerRef = useCallback(
         node => {
@@ -37,10 +56,10 @@ const RepositoryList = props => {
             <List
                 className="List"
                 height={window.innerHeight}
+                width={window.innerWidth * percent}
                 itemCount={props.repos.length}
-                itemSize={230}
+                itemSize={250}
                 itemData={props.repos}
-                width={700}
             >
                 {({ index, style }) => {
                     if (props.repos.length === index + 1) {
@@ -50,7 +69,9 @@ const RepositoryList = props => {
                                     name={props.repos[index].name}
                                     description={props.repos[index].description}
                                     url={props.repos[index].html_url}
+                                    icon={props.repos.fork ? mainLanguage() : mainLanguage(props.repos[index].language)}
                                 />
+                                {props.error ? <RepositoryItem error={props.error} /> : null}
                                 {props.comingData ? <LoadingHolder /> : null}
                             </div>
                         )
@@ -61,6 +82,7 @@ const RepositoryList = props => {
                                     name={props.repos[index].name}
                                     description={props.repos[index].description}
                                     url={props.repos[index].html_url}
+                                    icon={props.repos.fork ? mainLanguage() : mainLanguage(props.repos[index].language)}
                                 />
                             </div>
                         )
@@ -74,11 +96,12 @@ const RepositoryList = props => {
     return <section className="reposList">{reposList}</section>
 }
 
-const mapStateToProps = ({ repos, loading, comingData }) => {
+const mapStateToProps = ({ repos, loading, comingData, error }) => {
     return {
         repos,
         loading,
         comingData,
+        error,
     }
 }
 

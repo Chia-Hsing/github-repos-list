@@ -25,7 +25,7 @@ const getPublicRepositoriesSuccess = (state, action) => {
 }
 
 const getPublicRepositoriesFailed = (state, action) => {
-    return updateObj(state, {})
+    return updateObj(state, { error: action.error, loading: false })
 }
 
 const reducer = (state = initialState, action) => {

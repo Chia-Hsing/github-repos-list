@@ -1,0 +1,33 @@
+$color: (
+    white: white,
+    black: black,
+    heavy-grey: #626468,
+    grey: #8a8f94,
+    light-grey: #bcbdbe,
+    lighter-grey: rgba(231, 240, 226, 0.534),
+    yellow: rgb(219, 198, 3),
+);
+
+@function color($color-name) {
+    @return map-get($color, $color-name);
+}
+
+$font-size: (
+    l: 1.5em,
+    m: 1.2em,
+    s: 1em,
+);
+
+@function size($size) {
+    @return map-get($font-size, $size);
+}
+
+$font-weight: (
+    light: 300,
+    normal: 500,
+    bold: 700,
+);
+
+@function weight($weight) {
+    @return map-get($font-weight, $weight);
+}

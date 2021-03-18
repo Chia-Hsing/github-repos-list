@@ -1,0 +1,38 @@
+@mixin loading {
+    height: 0.9rem;
+    background: linear-gradient(45deg, color(heavy-grey), color(grey), color(light-grey));
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+
+@mixin loadingAfter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+    height: 100%;
+    width: 70%;
+    background: linear-gradient(45deg, transparent, color(lighter-grey), transparent);
+    transform: translateX(-70%);
+    animation: loading 2s infinite;
+}
+
+@mixin response($breakpoint) {
+    @if ($breakpoint == l) {
+        @media screen and (min-width: 769px) and (max-width: 1025px) {
+            @content;
+        }
+    }
+
+    @if ($breakpoint == m) {
+        @media screen and (min-width: 481px) and (max-width: 768px) {
+            @content;
+        }
+    }
+    @if ($breakpoint == s) {
+        @media screen and (max-width: 480px) {
+            @content;
+        }
+    }
+}
